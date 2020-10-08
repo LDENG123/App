@@ -1,0 +1,1622 @@
+﻿<Controls:MetroWindow x:Class="WpfApp1.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:iconpakges="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:Notifications="clr-namespace:Enterwell.Clients.Wpf.Notifications.Controls;assembly=Enterwell.Clients.Wpf.Notifications"
+        xmlns:Notifications1="clr-namespace:Notifications.Wpf.Controls;assembly=Notifications.Wpf"
+        xmlns:WAP="clr-namespace:WpfApp1.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:local="clr-namespace:WpfApp1.Command"
+        mc:Ignorable="d"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        Dialog:DialogParticipation.Register="{Binding}"
+        xmlns:cal="http://www.caliburnproject.org"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        Title="PFA DEMO Application" Height="450" Width="800"
+        Closing="MetroWindow_Closing"
+        WindowStartupLocation="CenterScreen"
+        GlowBrush="{DynamicResource AccentColorBrush}" 
+        Icon="Icon-Small.png" WindowStyle="ThreeDBorderWindow"             
+                      >
+  
+    <Controls:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/HamburgerMenuTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Thickness x:Key="ColumnMargin">10 5 10 5</Thickness>
+            <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
+
+            <!--  This is the template for all menu items. In this sample we use the glyph items.  -->
+            <DataTemplate x:Key="HamburgerMenuItem" DataType="{x:Type Controls:HamburgerMenuGlyphItem}">
+                <Grid Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Margin="12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Glyph}"
+                           Stretch="UniformToFill" />
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding Label}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type Controls:HamburgerMenuIconItem}">
+                <Grid Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Icon}"
+                                    Focusable="False"
+                                    IsTabStop="False" />
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding Label}" />
+                </Grid>
+            </DataTemplate>
+
+
+            <!--  This is the template for all option menu items.  -->
+            <DataTemplate x:Key="HamburgerOptionsMenuItem" DataType="{x:Type Controls:HamburgerMenuItem}">
+                <Grid Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Grid.Column="0"
+                                    Content="{Binding Tag}"
+                                    Focusable="False"
+                                    IsTabStop="False" />
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding Label}" />
+                </Grid>
+            </DataTemplate>
+
+            <ObjectDataProvider x:Key="DisplayModeEnumValues"
+                                MethodName="GetValues"
+                                ObjectType="{x:Type Controls:SplitViewDisplayMode}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Controls:SplitViewDisplayMode" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="VisibilityEnumValues"
+                                MethodName="GetValues"
+                                ObjectType="{x:Type Visibility}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="Visibility" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <Style x:Key="HamburgerMenuCreatorsItemStyle"
+                   BasedOn="{StaticResource HamburgerMenuItemStyle}"
+                   TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Controls:ItemHelper.ActiveSelectionBackgroundBrush" Value="Transparent" />
+                <Setter Property="Controls:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource AccentBaseColorBrush}" />
+                <Setter Property="Controls:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="Controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="Transparent" />
+                <Setter Property="Controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource GrayNormalBrush}" />
+                <Setter Property="Controls:ItemHelper.HoverBackgroundBrush" Value="{DynamicResource GrayBrush9}" />
+                <Setter Property="Controls:ItemHelper.HoverSelectedBackgroundBrush" Value="{DynamicResource GrayBrush9}" />
+                <Setter Property="Controls:ItemHelper.SelectedBackgroundBrush" Value="Transparent" />
+                <Setter Property="Controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource AccentBaseColorBrush}" />
+            </Style>
+            <Style x:Key="AccentCircleButtonStyle"
+                           BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                           TargetType="{x:Type ButtonBase}">
+                <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource GrayBrush7}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="HamburgerMenuCreatorsStyle"
+                   BasedOn="{StaticResource {x:Type Controls:HamburgerMenu}}"
+                   TargetType="{x:Type Controls:HamburgerMenu}">
+                <Setter Property="ItemContainerStyle" Value="{StaticResource HamburgerMenuCreatorsItemStyle}" />
+                <Setter Property="OptionsItemContainerStyle" Value="{StaticResource HamburgerMenuCreatorsItemStyle}" />
+                <Setter Property="PaneBackground" Value="{DynamicResource WhiteBrush}" />
+                <Setter Property="PaneForeground" Value="{DynamicResource TextBrush}" />
+                <Setter Property="ShowSelectionIndicator" Value="True" />
+            </Style>
+            <Style x:Key="BigFontButtonStyle">
+                <Setter Property="Control.FontFamily" Value="Times New Roman"/>
+                <Setter Property="Control.FontSize" Value="18"/>
+                <Setter Property="Control.FontWeight" Value="Bold"/>
+                <Setter Property="Control.Width" Value="75"/>
+                <Setter Property="Control.Height" Value="31"></Setter>
+                <Setter  Property="Control.VerticalAlignment" Value="Center"/>
+                <Style.Triggers>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions >
+                            <!--<Condition Property="Control.IsMousmove" Value="True"/>-->
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Control.Foreground" Value="Yellow"/>
+                    </MultiTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="SkyBlue"/>
+                <Style.Triggers>
+                    <!--鼠标滑过时字体为红色-->
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--指示灯-->
+            <!--<Style x:Key="light" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsConect}" Value="true">
+                    <Setter TargetName="Green_Light" Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </Style.Triggers>-->
+            <!--
+        </Style>-->
+        </ResourceDictionary>
+
+
+    </Controls:MetroWindow.Resources>
+    <Controls:MetroWindow.LeftWindowCommands>
+        <Controls:WindowCommands>
+            <!--<Button   >
+                <StackPanel>
+                    <iconpakges:PackIconEntypo Kind="Box"  Width="24" Height="24"  />
+                    <TextBlock Margin="30 -30 10 0" VerticalAlignment="Bottom" Text="ERROR"/>
+                </StackPanel>
+            </Button>
+            <Button >
+                <StackPanel>
+                    <iconpakges:PackIconEntypo Kind="Air" Width="24" Height="24" />
+                    <TextBlock Margin="30 -30 10 0" VerticalAlignment="Bottom" Text="Warn"/>
+                </StackPanel>
+            </Button>
+            >-->
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.LeftWindowCommands>
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button  Click="Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <iconpakges:PackIconMaterial Width="24" Height="24" Kind="Settings" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Setting" />
+                </StackPanel>
+            </Button>
+            <Button MouseDown="Button_MouseDown1">
+                <StackPanel Orientation="Horizontal" >
+                    <iconpakges:PackIconMaterial Width="24" Height="24" Kind="Account" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Login" />
+                </StackPanel>
+            </Button>
+            <ToggleButton Margin="4 0 0 4"
+ Style="{StaticResource MaterialDesignActionToggleButton}"
+  ToolTip="MaterialDesignActionLightToggleButton" Command="{Binding SetLanguage}">
+                <ToggleButton.Content >
+                    <StackPanel>
+                        <TextBlock> 中文 </TextBlock>
+                        <Button Command="{Binding login}"/>
+                    </StackPanel>
+                </ToggleButton.Content>
+                <materialDesign:ToggleButtonAssist.OnContent>
+                    <StackPanel>
+                        <TextBlock> US</TextBlock>
+                        <Button Command="{Binding login}"/>
+                    </StackPanel>
+                </materialDesign:ToggleButtonAssist.OnContent>
+            </ToggleButton>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl   >
+            <Controls:Flyout  Header="{ local:MyResource Key=Login}"
+                             Position="Right" 
+                              Theme="Adapt"
+                              >
+                <Grid Width="400" Margin="10">
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel >
+                        <TextBlock >
+                        <iconpakges:PackIconMaterial Margin="0 ,12,12,10" Kind="Account" />
+                            <Label Content="User_Name" HorizontalAlignment="Center" Margin="0 ,12,12,10"/>
+                        </TextBlock>
+                        <TextBox SpellCheck.IsEnabled="True" Text="{Binding User_Name}">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="ApplicationCommands.New" />
+                                    <MenuItem Command="ApplicationCommands.Delete" />
+                                    <MenuItem Command="ApplicationCommands.Print" />
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1">
+                        
+                        <TextBlock >
+                        <iconpakges:PackIconMaterial Margin="0 ,12,12,10" Kind="Passport" />
+                            <Label Content="Pass" HorizontalAlignment="Center" Margin="0 ,12,12,10"/>
+                        </TextBlock>
+                        <PasswordBox Margin="{StaticResource ControlMargin}"
+                             Controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(Controls:TextBoxHelper.HasText), Mode=OneWay}"
+                             Controls:TextBoxHelper.IsWaitingForData="True"
+                             Controls:TextBoxHelper.UseFloatingWatermark="True"
+                             Controls:TextBoxHelper.Watermark="Revealed PasswordBox"
+                             Style="{StaticResource MetroButtonRevealedPasswordBox}"
+                                    
+                                     cal:Message.Attach="[Event KeyUp]=[Action MyClick($MySender,NULL)]"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <TextBlock  >
+                        <iconpakges:PackIconMaterial Margin="0 ,12,12,10" Kind="AccountCheck" Height="30"  Width="30"/>
+                            <Button Width="100"
+                          Margin="{StaticResource ControlMargin}"
+                          Content="Check In" 
+                           Command="{Binding CheakIn}"
+                                    materialDesign:RippleAssist.Feedback="#DD000000"
+                                    Style="{StaticResource MaterialDesignFlatButton}" 
+                                           />
+                             <iconpakges:PackIconMaterial Margin="30 ,12,12,10" Kind="AccountCheck" Height="30"  Width="30"/>
+                            <Button Width="100"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Check Out"
+                   Style="{StaticResource MaterialDesignFlatButton}" />
+                        </TextBlock>
+                    </StackPanel>
+
+                   
+                </Grid>
+
+
+            </Controls:Flyout>
+            <Controls:Flyout Header="{ local:MyResource Key=Window_Seting}"
+                             Position="Right"
+                             Theme="Adapt">
+                <Grid Width="400" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <ScrollViewer Grid.Column="1"
+                      MinWidth="230"
+                      Margin="10 10 5 10"
+                      Padding="0 0 5 0"
+                      HorizontalContentAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel Margin="0 0 0 10" Orientation="Vertical">
+                                <Controls:ToggleSwitch Margin="0 10 0 5"
+                                       Header="{ local:MyResource Key=IsPaneOpen}"
+                                       IsChecked="{Binding ElementName=HamburgerMenuControl, Path=IsPaneOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=DisplayMode}">
+                                    <ComboBox MinWidth="150"
+                              HorizontalAlignment="Left"
+                              ItemsSource="{Binding Source={StaticResource DisplayModeEnumValues}}"
+                              SelectedItem="{Binding ElementName=HamburgerMenuControl, Path=DisplayMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Controls:MetroHeader>
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=SelectedIndex}">
+                                    <Slider AutoToolTipPlacement="TopLeft"
+                            Maximum="3"
+                            Minimum="0"
+                            Value="{Binding ElementName=HamburgerMenuControl, Path=SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Controls:MetroHeader>
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=CompactPaneLength}">
+                                    <Slider AutoToolTipPlacement="TopLeft"
+                            Maximum="80"
+                            Minimum="10"
+                            Value="{Binding ElementName=HamburgerMenuControl, Path=CompactPaneLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Controls:MetroHeader>
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=OpenPaneLength}">
+                                    <Slider AutoToolTipPlacement="TopLeft"
+                            Maximum="400"
+                            Minimum="50"
+                            Value="{Binding ElementName=HamburgerMenuControl, Path=OpenPaneLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Controls:MetroHeader>
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=HamburgerVisibility }">
+                                    <ComboBox MinWidth="150"
+                              HorizontalAlignment="Left"
+                              ItemsSource="{Binding Source={StaticResource VisibilityEnumValues}}"
+                              SelectedItem="{Binding ElementName=HamburgerMenuControl, Path=HamburgerVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </Controls:MetroHeader>
+
+                                <Controls:MetroHeader Margin="0 10 0 5" Header="{ local:MyResource Key=Hamburger Width / Height }">
+                                    <UniformGrid Columns="2">
+                                        <Slider Margin="0 0 5 0"
+                                AutoToolTipPlacement="TopLeft"
+                                Maximum="80"
+                                Minimum="10"
+                                Value="{Binding ElementName=HamburgerMenuControl, Path=HamburgerWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Slider Margin="5 0 0 0"
+                                AutoToolTipPlacement="TopLeft"
+                                Maximum="80"
+                                Minimum="10"
+                                Value="{Binding ElementName=HamburgerMenuControl, Path=HamburgerHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </UniformGrid>
+                                </Controls:MetroHeader>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1">
+                        <Grid Width="400">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                        <TextBlock Text="{ local:MyResource Key=Window_Thems}" Grid.Row="0"></TextBlock>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8" Grid.Row="1" Width="400">
+                            <TextBlock VerticalAlignment="Center">Light</TextBlock>
+                            <ToggleButton Margin="8 0 16 0" Command="{Binding ToggleBaseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" />
+                            <TextBlock VerticalAlignment="Center">Dark</TextBlock>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8" Grid.Row="2">
+                            <TextBlock VerticalAlignment="Center" Text="{ local:MyResource Key=Window_Thems1}"></TextBlock>
+                            <Button Margin="8 0 0 0"  Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                    Command="{Binding ButtonThem0Command}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" />
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8" Grid.Row="3">
+                            <TextBlock VerticalAlignment="Center" Text="{ local:MyResource Key=Window_Thems2}"></TextBlock>
+                            <Button Margin="8 0 0 0" Style="{StaticResource MaterialDesignRaisedAccentButton}" 
+                                    Command="{Binding ButtonThem1Command}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"  />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Controls:Flyout>
+            <!--<Controls:Flyout x:Name="FM"  Header="FM"
+                             Position="Left"
+                             Theme="Adapt"
+                             IsOpen="{Binding Vision}">
+                <Grid Width="400" Margin="10">
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <materialDesign:Card
+    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+    Padding="32">
+                       
+                    <StackPanel>
+                            --><!--<Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                            </Grid>--><!--
+
+                            <TextBlock Margin="0,0,0,0"
+                                       FontSize="22"
+                                       FontStretch="Medium"
+                                       Foreground="SeaGreen"
+                                HorizontalAlignment="Center">
+   
+  FM X
+                            </TextBlock>
+                            <TextBox
+                                Margin="0,0,0,0"
+    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+   HorizontalAlignment="Left"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+  Width="150"
+    materialDesign:HintAssist.Hint="ACC"/>
+                            <TextBox
+                                
+    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+   
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    Margin="180,-60,0,0"
+    materialDesign:HintAssist.Hint="DCC"/>
+                           
+                            <TextBox
+                                  
+    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+   HorizontalAlignment="Center"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    Margin="-190,0,0,0"
+     Width="150"
+    materialDesign:HintAssist.Hint="ACT"/>
+                            <TextBox 
+    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+   
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    Margin="180,-60,0,0"
+     Width="200"
+    materialDesign:HintAssist.Hint="SPEED"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                                       FontSize="22"
+                                       FontStretch="Medium"
+                                       Foreground="SeaGreen"
+                                HorizontalAlignment="Left">
+State
+                            </TextBlock>
+                            <Button Margin="-290,20,0,0" 
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                                
+
+                            </Button>
+                            <Button Margin="-150,-40,0,0"  
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                                
+                            </Button>
+                            <Button  Margin="-10,-40,0,0"    
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                                
+                            </Button>
+                            <Button Margin="130,-40,0,0"   
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                              
+                            </Button>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                                       FontSize="22"
+                                       FontStretch="Medium"
+                                       Foreground="SeaGreen"
+                                HorizontalAlignment="Left">
+Bouton
+                            </TextBlock>
+                            <Button Margin="-290,20,0,0" 
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                                
+                            </Button>
+                            <Button Margin="-150,-40,0,0"  
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                               
+   
+                            </Button>
+                            <Button  Margin="-10,-40,0,0"    
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                              
+                            </Button>
+                            <Button Margin="130,-40,0,0"   
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  ToolTip="P">
+                              
+                            </Button>
+                        </StackPanel>
+                       
+                    </materialDesign:Card>
+                </Grid>
+            </Controls:Flyout>-->
+            <Controls:Flyout x:Name="FM1"  Header="FM"
+                             Position="Top"
+                             Theme="Adapt"
+                             IsOpen="{Binding Vision}">
+                <GroupBox Header="覆膜单元手动参数设定(单位:mm)" FontSize="16" DockPanel.Dock="Top" Height="250">
+                    <Canvas>
+                        <!--X轴-->
+                        <Label Content="FMX加速度:" FontSize="16" Canvas.Left="10" Canvas.Top="12" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="110" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMX减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="12" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="FMX寸动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMX点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="12" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="865" Canvas.Top="15" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="12" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1020" Canvas.Top="15" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="12" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1170" Canvas.Top="15" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="12" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="1320" Canvas.Top="15" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Button   Canvas.Left="1420" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        <!--Y轴-->
+                        <Label Content="FMY加速度:" FontSize="16" Canvas.Left="10" Canvas.Top="47" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="110" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMY减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="47" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="FMY寸动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMY点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="47" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="865" Canvas.Top="50" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>  
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="47" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1020" Canvas.Top="50" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="47" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="1170" Canvas.Top="50" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="47" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="1320" Canvas.Top="50" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Button   Canvas.Left="1420" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        
+                        <!--Z轴-->
+                        <Label Content="FMZ加速度:" FontSize="16" Canvas.Left="10" Canvas.Top="82" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="110" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMZ减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="82" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="FMZ寸动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMZ点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="82" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="865" Canvas.Top="85" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="82" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1020" Canvas.Top="85" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="82" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"     Canvas.Left="1170" Canvas.Top="85" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                         
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="82" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"      Canvas.Left="1320" Canvas.Top="85" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Button   Canvas.Left="1420" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        
+                        <!--R轴-->
+                        <Label Content="FMR加速度:" FontSize="16" Canvas.Left="10" Canvas.Top="117" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMR减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="117" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="FMR寸动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMR点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="117" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"      Canvas.Left="865" Canvas.Top="120" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                         
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="117" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"      Canvas.Left="1020" Canvas.Top="120"  >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="117" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"       Canvas.Left="1170" Canvas.Top="120" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                         
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="117" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"        Canvas.Left="1320" Canvas.Top="120" >
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        
+                        <Button   Canvas.Left="1420" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                         
+                        <!--T轴-->
+                        <Label Content="FMT加速度:" FontSize="16" Canvas.Left="10" Canvas.Top="150" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="110" Canvas.Top="150" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMT减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="150" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="150" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="FMT寸动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="150" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="150" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="FMT点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="150" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="150" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="150" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="865" Canvas.Top="155">
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                         
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="150" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1020" Canvas.Top="155">
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="150" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"   Canvas.Left="1170" Canvas.Top="155">
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="150" Height="30" Width="112"/>
+                        <Ellipse  HorizontalAlignment="Center" Fill="Gray" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30"  Canvas.Left="1320" Canvas.Top="155">
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="True">
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Get_bool00}" Value="False">
+                                            <Setter Property="Fill" Value="Green"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse> 
+                        <Button   Canvas.Left="1420" Canvas.Top="150" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="150" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="150" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="150" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                    </Canvas>
+                </GroupBox>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="TAB"  Header="FM"
+                             Position="Top"
+                             Theme="Adapt"
+                             IsOpen="{Binding Vision1}">
+                <GroupBox Header="上料单元手动参数设定(单位:mm)" FontSize="16" DockPanel.Dock="Top" Height="250">
+                    <Canvas>
+                        <Label Content="TABY0实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="12" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="TABY0加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="12" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="TABY0减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="TABY0点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        <!--Y轴-->
+                        <Label Content="R0实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="47" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="R0加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="47" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="R0减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="R0点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                        <!--Z轴-->
+                        <Label Content="TABY1实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="82" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="TABY1加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="82" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="TABY1减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="TABY1点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                        <!--R轴-->
+                        <Label Content="R1实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="117" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="R1加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="117" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="R1减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="R1点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="117" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="120" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="117" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+
+                    </Canvas>
+                </GroupBox>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="Carray"  Header="Carray"
+                             Position="Top"
+                             Theme="Adapt"
+                             IsOpen="{Binding Vision3}">
+                <GroupBox Header="输送单元手动参数设定(单位:mm)" FontSize="16" DockPanel.Dock="Top" Height="250">
+                    <Canvas>
+                        <Label Content="CarryZ实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="12" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryZ加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="12" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="CarryZ减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryZ点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        <!--Y轴-->
+                        <Label Content="CarryX实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="47" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryX加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="47" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="CarryX减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryX点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                        <!--Z轴-->
+                        <Label Content="CarryT实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="82" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryT加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="82" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="CarryT减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="CarryT点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                    </Canvas>
+                </GroupBox>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="Vision"  Header="Vision"
+                             Position="Top"
+                             Theme="Adapt"
+                             IsOpen="{Binding Vision2}">
+                <GroupBox Header="视觉单元手动参数设定(单位:mm)" FontSize="16" DockPanel.Dock="Top" Height="250">
+                    <Canvas>
+                        <Label Content="VisionX实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="12" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionX加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="12" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="VisionX减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionX点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="12" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="15" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="12" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+                        <!--Y轴-->
+                        <Label Content="VisionY0实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="47" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionY0加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="47" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="VisionY0减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionY0点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="47" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="50" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="47" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+                        <!--Z轴-->
+                        <Label Content="VisionY1实际速度:" FontSize="16" Canvas.Left="10" Canvas.Top="82" Height="30" Width="115"/>
+                        <TextBox  AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="120" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionY1加速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="190" Canvas.Top="82" Height="30" Width="114"/>
+                        <TextBox    AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="300" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="False" />
+                        <Label Content="VisionY1减速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="385" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="495" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="VisionY1点动速度:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="584" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="6"
+                            Canvas.Left="695" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap"  />
+                        <Label Content="原点标志:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="750" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="865" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Label Content="正极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="910" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1020" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="负极限:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1060" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1170" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null"/>
+                        <Label Content="故障指示:" HorizontalContentAlignment="Right" FontSize="16" Canvas.Left="1210" Canvas.Top="82" Height="30" Width="112"/>
+                        <TextBox     AcceptsReturn="True" FontSize="16" MaxLength="5" VerticalContentAlignment="Center"
+                            Canvas.Left="1320" Canvas.Top="85" Height="30" Width="90"   TextWrapping="Wrap" IsReadOnly="True" Text="null" />
+                        <Button   Canvas.Left="1420" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="HomeButton">
+                            Home
+                        </Button>
+                        <Button   Canvas.Left="1520" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog+
+                        </Button>
+                        <Button   Canvas.Left="1620" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="JogButton">
+                            Jog-
+                        </Button>
+                        <Button   Canvas.Left="1720" Canvas.Top="82" Height="30" Width="92"
+    Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="ClearButton">
+                            Clear
+                        </Button>
+
+
+                    </Canvas>
+                </GroupBox>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto" MinHeight="21"/>
+        </Grid.RowDefinitions>
+
+        <Notifications:NotificationMessageContainer Manager="{Binding Manager }" Grid.Row="1" />
+        <Notifications1:NotificationArea x:Name="WindowArea" Position="BottomRight" MaxItems="4"/>
+        <Border Grid.Column="0" Grid.Row="0"
+                Margin="0 10 0 10"
+                BorderBrush="{DynamicResource GrayBrush7}"
+                BorderThickness="1">
+
+ 
+            <Controls:HamburgerMenu x:Name="HamburgerMenuControl"
+                                    HamburgerWidth="48"
+                                    IsPaneOpen="True"
+                                    ItemInvoked="HamburgerMenuControl_OnItemInvoked"
+                                    ItemTemplate="{StaticResource MenuItemTemplate}"
+                                    OptionsItemTemplate="{StaticResource MenuItemTemplate}"
+                                    SelectedIndex="0"
+                                    Style="{StaticResource HamburgerMenuCreatorsStyle}"
+                                    VerticalScrollBarOnLeftSide="False">
+               
+                <Controls:HamburgerMenu.ItemsSource>
+                    <Controls:HamburgerMenuItemCollection>
+                        <Controls:HamburgerMenuIconItem Icon="{iconpakges:Material Kind=Home}" Label="{ local:MyResource Key=AlmView }">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:AlmView/>
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                        <Controls:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=Motor}" Label="{local:MyResource Key=AsixView }">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:AsixView />
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                        <Controls:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=ContentPaste}" Label="{local:MyResource Key=LogView  }">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:LogView />
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                        <Controls:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=ChartBarStacked}" Label="{local:MyResource Key=LiveChartView}">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:LiveChartView />
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                        <Controls:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=ClipboardText}" Label="{local:MyResource Key=RecipeView}">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:RecipeView/>
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                    </Controls:HamburgerMenuItemCollection>
+                </Controls:HamburgerMenu.ItemsSource>
+
+
+                <Controls:HamburgerMenu.OptionsItemsSource>
+                    <Controls:HamburgerMenuItemCollection>
+                        <Controls:HamburgerMenuIconItem Icon="{iconpakges:Material Kind=Settings}" Label="{local:MyResource Key=MonitoringView}">
+                            <Controls:HamburgerMenuIconItem.Tag>
+                                <WAP:MonitoringView/>
+                            </Controls:HamburgerMenuIconItem.Tag>
+                        </Controls:HamburgerMenuIconItem>
+                    </Controls:HamburgerMenuItemCollection>
+                </Controls:HamburgerMenu.OptionsItemsSource>
+
+                <Controls:HamburgerMenu.ContentTemplate>
+                    <DataTemplate DataType="{x:Type Controls:HamburgerMenuIconItem}">
+                        <Grid Margin="20 0 10 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                           
+                            <TextBlock Grid.Row="0"
+                                       Margin="0 15 0 5"
+                                       Padding="0"
+                                       x:Name="Select_name"
+                                       FontFamily="{DynamicResource HeaderFontFamily}"
+                                       FontSize="{DynamicResource HeaderFontSize}"
+                                       Text="{Binding Label}" />
+                            <ScrollViewer Grid.Row="1"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ContentControl Content="{Binding Tag}" Focusable="False" />
+                            </ScrollViewer>
+                        </Grid>
+                    </DataTemplate>
+                </Controls:HamburgerMenu.ContentTemplate>
+
+            </Controls:HamburgerMenu>
+
+        </Border>
+        <StatusBar Grid.Row="1"  Grid.ColumnSpan="2">
+            <StatusBarItem>PFA DEMO Application</StatusBarItem>
+            <Separator Style="{StaticResource MetroStatusBarSeparator}" />
+            <StatusBarItem>Selected Tab:</StatusBarItem>
+            <StatusBarItem Content="{Binding Label }" />
+            <StatusBarItem>User_Name:</StatusBarItem>
+            <StatusBarItem Content="{Binding User_Name}" />
+            <StatusBarItem>Time:</StatusBarItem>
+            <StatusBarItem Content="{Binding Time_Now_0}" />
+        </StatusBar>
+    </Grid>
+</Controls:MetroWindow>

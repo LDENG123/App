@@ -1,0 +1,8 @@
+﻿------ Starting pre-build validation for project 'Setup1' ------ 
+------ Starting pre-build validation for project 'Setup1' ------ 
+------ Pre-build validation for project 'Setup1' completed ------
+------ Pre-build validation for project 'Setup1' completed ------
+1>------ 已启动生成: 项目: Setup1, 配置: Debug ------
+1>------ 已启动生成: 项目: Setup1, 配置: Debug ------
+Building file 'I:\wpfnotice\Wpf_notice\Setup1\Debug\Setup1.msi'...
+Building file 'I:\wpfnotice\Wpf_notice\Setup1\Debug\Setup1.msi'...
