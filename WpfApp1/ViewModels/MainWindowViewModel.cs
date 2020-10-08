@@ -492,7 +492,7 @@ namespace WpfApp1
                                 _eventAggregator.PublishOnUIThread(XmlItems0);
 
                                 Notice.Show("Success",
-                                       "Publish Success",
+                                       "Publish Success tesy",
                                        1,
                                        MessageBoxIcon.Success);
 
